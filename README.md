@@ -1,8 +1,16 @@
 mlops_project
 ==============================
-This project is part of the Machine Learning Operations (https://skaftenicki.github.io/dtu_mlops/).
+This project is part of the 02476 Machine Learning Operations Course (https://skaftenicki.github.io/dtu_mlops/).
 
 ## Project Description
+
+The scope of this project is to work with the topics from the course by fine-tuning an NLP model. We want to fine-tune an NLP model to generate Covid-19 press conference transcriptions from an input sentence. The goal is to generate press conference transcriptions that seem as genuine as possible.
+
+We will be using the Transformers framework from the huggingface community. The Transformers framework provides access to many pretrained models including many for NLP. This will allow us to use pretrained models which can be fine-tuned to our specific goal.
+
+Initially, we will fine-tune the model using the official transcripts from the Prime Minister's Office (Statsministeriet) press conferences. Later we will look into including press releases from other offices. The press conference transcripts are acquired through official websites and initially saved as plaintext. The data will then be preprocessed to allow for training and fine-tuning of models. The dataset will consist of 31 different transcripts concerning COVID-19 and other matters of national and international importance. These are processed into Tensors and saved to allow for the use of all the data from the press conference transcripts as the size of the training data that a model can take at once is limited.
+
+We expect to work on fine-tuning the GPT-2 model using the aforementioned dataset. GPT-2 has been fine-tuned and used for similar purposes before.
 
 
 ## Project Organization

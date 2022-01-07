@@ -1,0 +1,8 @@
+
+
+name: "covid_press"
+backbone: flax-community/dansk-gpt-wiki
+model_max_length: 512
+batch_size: 10
+lr: 3e-5
+n_epochs: 10
