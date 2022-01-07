@@ -1,6 +1,6 @@
 mlops_project
 ==============================
-This project is part of the Machine Learning Operations (https://skaftenicki.github.io/dtu_mlops/).
+This project is part of the 02476 Machine Learning Operations Course (https://skaftenicki.github.io/dtu_mlops/).
 
 ## Project Description
 
