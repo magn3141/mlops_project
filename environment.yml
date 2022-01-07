@@ -97,4 +97,4 @@ dependencies:
     - xxhash==2.0.2
     - yarg==0.1.9
     - yarl==1.7.2
-prefix: /Users/andersbensen/miniforge3/envs/mlops_proj
+# prefix: /Users/andersbensen/miniforge3/envs/mlops_proj
