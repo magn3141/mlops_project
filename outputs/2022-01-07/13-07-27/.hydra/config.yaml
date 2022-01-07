@@ -1,0 +1,4 @@
+model_max_length: 512
+batch_size: 10
+lr: 3.0e-05
+n_epochs: 10
