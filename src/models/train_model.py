@@ -4,12 +4,13 @@ import torch
 from src.data.conference_dataset import TextDataset
 import hydra
 from omegaconf import DictConfig, OmegaConf
-
+import datetime
 
 # Model_max_length
 # Batch size
 # Learning rate
 # n_epochs
+
 
 @hydra.main(config_path="config", config_name="config")
 def main(cfg: DictConfig):
@@ -17,9 +18,8 @@ def main(cfg: DictConfig):
     working_dir = hydra.utils.get_original_cwd()
 
     tokenizer = AutoTokenizer.from_pretrained(
-        "flax-community/dansk-gpt-wiki", model_max_length=cfg.model_max_length)
-    model = AutoModelForCausalLM.from_pretrained(
-        "flax-community/dansk-gpt-wiki")
+        cfg.backbone, model_max_length=cfg.model_max_length)
+    model = AutoModelForCausalLM.from_pretrained(cfg.backbone)
 
     dataset = TextDataset(path=working_dir + "/data/raw/press_conferences/",
                           tokenizer=tokenizer, max_length=cfg.model_max_length)
@@ -42,7 +42,8 @@ def main(cfg: DictConfig):
         avg_loss = running_loss/len(dataloader)
         print(f"Epoch training loss: {loss}")
 
-    model.save_pretrained(working_dir + "/models")
+    now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    model.save_pretrained(working_dir + "/models", cfg.name + "_"+now)
 
 
 if __name__ == "__main__":
