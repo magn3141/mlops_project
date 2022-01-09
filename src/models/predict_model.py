@@ -20,7 +20,7 @@ def main(cfg):
     working_dir = hydra.utils.get_original_cwd()
 
     tokenizer = AutoTokenizer.from_pretrained("flax-community/dansk-gpt-wiki")
-    model = AutoModelForCausalLM.load_pretrained(working_dir + cfg.model_path)
+    model = AutoModelForCausalLM.from_pretrained(working_dir + cfg.model_path)
 
     tokenized_string = tokenizer.encode(cfg.text, return_tensors='pt')
     generated_text_encoded = model.generate(
