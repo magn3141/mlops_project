@@ -57,6 +57,7 @@ def main(cfg: DictConfig):
         wandb.log({"train_loss": epoch_loss})
 
         if (epoch_loss < min_loss):
+            min_loss = epoch_loss
             now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             model.save_pretrained(working_dir + "/models", cfg.name + "_"+now)
 
