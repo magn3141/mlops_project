@@ -1,0 +1,22 @@
+{
+    "os": "macOS-12.1-arm64-arm-64bit",
+    "python": "3.9.9",
+    "heartbeatAt": "2022-01-10T20:36:59.778506",
+    "startedAt": "2022-01-10T20:36:59.136662",
+    "docker": null,
+    "cpu_count": 10,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "/Users/andersbensen/Documents/github/mlops_project/src/models/train_model.py",
+    "codePath": "src/models/train_model.py",
+    "git": {
+        "remote": "https://github.com/magn3141/mlops_project.git",
+        "commit": "07bbd13eeb944ec7fc7cba76b6fe5a86e6766469"
+    },
+    "email": "anders_bensen@hotmail.com",
+    "root": "/Users/andersbensen/Documents/github/mlops_project",
+    "host": "MacBook-Pro-tilhrende-Anders.local",
+    "username": "root",
+    "executable": "/Users/andersbensen/miniforge3/envs/mlops_proj/bin/python"
+}

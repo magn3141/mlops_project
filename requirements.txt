@@ -1,5 +1,4 @@
-#
--e .
+-e . 
 
 click==8.0.3
 hydra-core==1.1.1
@@ -9,3 +8,4 @@ python-dotenv==0.19.2
 setuptools==60.2.0
 torch==1.10.0
 transformers==4.15.0
+wandb==0.12.9
