@@ -2,8 +2,11 @@
 
 name: "covid_press"
 backbone: flax-community/dansk-gpt-wiki
+continue_training: False
 model_max_length: 512
 batch_size: 8
 lr: 3e-5
 n_epochs: 10
 train_data: "data_tensor_512.pt"
+wandb_project: "danish_gpt2"
+wandb_entity: "mlops_grp40"
