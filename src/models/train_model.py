@@ -1,14 +1,13 @@
-from typing import Dict
-from transformers import AutoTokenizer, AutoModelForCausalLM, AutoConfig
-import torch
-from src.data.conference_dataset import TextDataset
-import hydra
-from omegaconf import DictConfig, OmegaConf
-import datetime
-import numpy as np
-import wandb
 import logging
 
+import hydra
+import numpy as np
+import torch
+import wandb
+from omegaconf import DictConfig
+from transformers import AutoConfig, AutoModelForCausalLM
+
+from src.data.conference_dataset import TextDataset
 
 # Model_max_length
 # Batch size
@@ -83,7 +82,7 @@ def main(cfg: DictConfig):
             # min_loss
             model.save_pretrained(f"{working_dir}/models/{cfg.name}")
             model.save_pretrained("./")
-     # now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M:%S")
+        # now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M:%S")
 
 
 if __name__ == "__main__":
