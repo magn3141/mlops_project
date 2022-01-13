@@ -8,10 +8,8 @@ from transformers import AutoModelForCausalLM
 
 from src.data.conference_dataset import TextDataset
 
-model = AutoModelForCausalLM.from_pretrained("flax-community/dansk-gpt-wiki")
-optimizer = torch.optim.AdamW(params=model.parameters(), lr=3e-5)
 
-
+@pytest.mark.skipif(not os.path.exists('models/'), reason="No models found")
 @pytest.mark.skipif(not os.path.exists('data/processed/data_tensor_512.pt'),
                     reason="Data not found")
 def test_gradients():
@@ -20,6 +18,9 @@ def test_gradients():
     backpropogating on our training data.
 
     '''
+    model = AutoModelForCausalLM.from_pretrained("flax-community/dansk-gpt-wiki")
+    optimizer = torch.optim.AdamW(params=model.parameters(), lr=3e-5)
+
     train_set = TextDataset('data/processed/data_tensor_512.pt')
 
     optimizer = optim.Adam(model.parameters(), lr=float(3e-5))
@@ -37,6 +38,7 @@ def test_gradients():
     assert len(gradients.unique()) > 1, "The gradients were not updated after backpropping"
 
 
+@pytest.mark.skipif(not os.path.exists('models/'), reason="No models found")
 @pytest.mark.skipif(not os.path.exists('data/processed/data_tensor_512.pt'),
                     reason="Data not found")
 def test_loss_reduction():
@@ -45,8 +47,12 @@ def test_loss_reduction():
     small training session.
 
     '''
+    model = AutoModelForCausalLM.from_pretrained("flax-community/dansk-gpt-wiki")
+    optimizer = torch.optim.AdamW(params=model.parameters(), lr=3e-5)
+
     dataset = TextDataset('data/processed/data_tensor_512.pt')
     dataloader = torch.utils.data.DataLoader(dataset[:2], batch_size=1, shuffle=True)
+
     running_loss = []
     for epoch in range(2):
         running_loss_e = []
