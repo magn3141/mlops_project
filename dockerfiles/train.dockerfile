@@ -13,7 +13,6 @@ COPY src/ src/
 COPY data/ data/
 COPY models/ models/
 WORKDIR /
-RUN pip install -U git+https://github.com/huggingface/transformers.git@v4.13.0
 RUN pip install -r requirements.txt --no-cache-dir
 
 
