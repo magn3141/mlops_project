@@ -1,22 +1,21 @@
-FROM python:3.9-slim
+# Base image
+FROM huggingface/transformers-pytorch-cpu
 
 # install python 
 RUN apt update && \
-    apt install --no-install-recommends -y build-essential gcc && \
-    apt clean && rm -rf /var/lib/apt/lists/* \ curl
+    apt install --no-install-recommends -y build-essential gcc curl && \ 
+    apt clean && rm -rf /var/lib/apt/lists/*
+
 
 # Copy files
+WORKDIR /
 COPY requirements.txt requirements.txt
 COPY setup.py setup.py
 COPY src/ src/
 COPY data/ data/
 COPY models/ models/
-WORKDIR /
-ENV RUSTUP_HOME=/rust
-ENV CARGO_HOME=/cargo 
-ENV PATH=/cargo/bin:/rust/bin:$PATH
-RUN echo "(curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain nightly --no-modify-path) && rustup default nightly" > /install-rust.sh && chmod 755 /install-rust.sh
+# RUN pip install torch==1.10.1+cpu torchvision==0.11.2+cpu torchaudio==0.10.1+cpu -f https://download.pytorch.org/whl/cpu/torch_stable.html
+RUN pip3 install -r /requirements.txt --no-cache-dir
 
-RUN pip install -r requirements.txt --no-cache-dir
-ENTRYPOINT ["python", "-u", "src/models/predict_model.py"]
+ENTRYPOINT ["python3", "-u", "src/models/predict_model.py"]
 
