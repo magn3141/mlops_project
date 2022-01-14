@@ -58,8 +58,8 @@ def main(cfg: DictConfig):
         for i, batch in enumerate(dataloader):
 
             optimizer.zero_grad()
-            with profile(activities=[ProfilerActivity.CPU, ProfilerActivity.CUDA],\
-                 record_shapes=True) as prof:
+            with profile(activities=[ProfilerActivity.CPU, ProfilerActivity.CUDA],
+                        record_shapes=True) as prof:
                 with record_function("model_inference"):
                     outputs = model(batch.to(device), labels=batch.to(device))
 
@@ -90,9 +90,9 @@ def main(cfg: DictConfig):
             model.save_pretrained(f"{working_dir}/models/{cfg.name}")
             model.save_pretrained("./")
         # now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M:%S")
-        print(prof.key_averages(group_by_input_shape=True)\
+        print(prof.key_averages(group_by_input_shape=True)
             .table(sort_by="cpu_time_total", row_limit=10))
 
-            
+     
 if __name__ == "__main__":
     main()
