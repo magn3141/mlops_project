@@ -34,8 +34,7 @@ def main(cfg: DictConfig):
         log.info(
             f"Continue training on /models/{cfg.name} with loss {min_loss}")
     else:
-        # Loading a pretrained backbone
-        log.info("Training {cfg.backbone}")
+        log.info(f"Training {cfg.backbone}")
         model = AutoModelForCausalLM.from_pretrained(cfg.backbone)
         min_loss = 10e10
     wandb.watch(model, log_freq=100)
