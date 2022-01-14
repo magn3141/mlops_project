@@ -32,7 +32,7 @@ def main(cfg: DictConfig):
         log.info(
             f"Continue training on /models/{cfg.name} with loss {min_loss}")
     else:
-        log.info("Training {cfg.backbone}")
+        log.info(f"Training {cfg.backbone}")
         model = AutoModelForCausalLM.from_pretrained(cfg.backbone)
         min_loss = 10e10
     wandb.watch(model, log_freq=100)
@@ -40,7 +40,7 @@ def main(cfg: DictConfig):
     dataset = TextDataset(
         path=working_dir + "/data/processed/" + cfg.train_data)
     dataloader = torch.utils.data.DataLoader(
-        dataset, batch_size=cfg.batch_size, shuffle=True)
+        dataset[:2], batch_size=cfg.batch_size, shuffle=True)
     log.info("Data loaded")
 
     device = 'cuda' if torch.cuda.is_available() else 'cpu'

@@ -2,10 +2,10 @@
 
 click==8.0.3
 hydra-core==1.1.1
-numpy==1.22.0
+numpy==1.19.5
 omegaconf==2.1.1
 python-dotenv==0.19.2
-setuptools==60.2.0
+setuptools==59.0.1
 torch==1.10.0
 transformers==4.15.0
 wandb==0.12.9
