@@ -5,6 +5,7 @@ import numpy as np
 import torch
 import wandb
 from omegaconf import DictConfig
+from torch.profiler import profile, record_function, ProfilerActivity
 from transformers import AutoConfig, AutoModelForCausalLM
 
 from src.data.conference_dataset import TextDataset
@@ -23,6 +24,7 @@ def main(cfg: DictConfig):
     working_dir = hydra.utils.get_original_cwd()
 
     if (cfg.continue_training):
+        # Loading a saved model
         model = AutoModelForCausalLM.from_pretrained(
             working_dir + "/models/" + cfg.name)
         config = AutoConfig.from_pretrained(
@@ -37,6 +39,7 @@ def main(cfg: DictConfig):
         min_loss = 10e10
     wandb.watch(model, log_freq=100)
 
+    # Creating dataset and dataloader
     dataset = TextDataset(
         path=working_dir + "/data/processed/" + cfg.train_data)
     dataloader = torch.utils.data.DataLoader(
@@ -48,14 +51,17 @@ def main(cfg: DictConfig):
 
     optimizer = torch.optim.AdamW(params=model.parameters(), lr=cfg.lr)
 
+    # Training the model
     for epoch in range(cfg.n_epochs):
         log.info(f"--- Epoch: {epoch} ---")
         running_loss = []
         for i, batch in enumerate(dataloader):
 
             optimizer.zero_grad()
-
-            outputs = model(batch.to(device), labels=batch.to(device))
+            with profile(activities=[ProfilerActivity.CPU, ProfilerActivity.CUDA],
+                         record_shapes=True) as prof:
+                with record_function("model_inference"):
+                    outputs = model(batch.to(device), labels=batch.to(device))
 
             loss = outputs[0]
             loss.backward()
@@ -71,6 +77,7 @@ def main(cfg: DictConfig):
         epoch_loss = np.mean(running_loss)
         wandb.log({"train_loss": epoch_loss})
 
+        # Logging and saving the model if loss is lower than previous min loss
         if (epoch_loss < min_loss):
             min_loss = epoch_loss
             # now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M:%S")
@@ -83,6 +90,8 @@ def main(cfg: DictConfig):
             model.save_pretrained(f"{working_dir}/models/{cfg.name}")
             model.save_pretrained("./")
         # now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M:%S")
+        print(prof.key_averages(group_by_input_shape=True)
+              .table(sort_by="cpu_time_total", row_limit=10))
 
 
 if __name__ == "__main__":
