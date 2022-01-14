@@ -14,11 +14,11 @@ from transformers import AutoTokenizer
 @click.argument('tensor_size')
 @click.argument('tokenizer')
 @click.argument('output_filepath', type=click.Path())
-def main(input_filepath, tensor_size, tokenizer, output_filepath):
+def main(input_filepath: str, tensor_size: str, tokenizer: str, output_filepath: str):
     """ Runs data processing scripts to turn raw data from (../raw) into
         cleaned data ready to be analyzed (saved in ../processed).
         The tokenizer is used to tokenize the input data, where each data
-        point is a maxium size of tensor_size.
+        point is a maximum size of tensor_size.
     """
     tensor_size = int(tensor_size)
 
@@ -32,7 +32,9 @@ def main(input_filepath, tensor_size, tokenizer, output_filepath):
     for f in files:
         with open(input_filepath+f) as file:
             # data = file.read().replace('\n',' ')
+            # Loading data from file
             data = file.read()
+            # Tokenizing data
             tokenized_text = tokenizer.encode(data, return_tensors='pt')
             start = 0
             for i in data:
@@ -41,6 +43,7 @@ def main(input_filepath, tensor_size, tokenizer, output_filepath):
                     break
                 start += tensor_size
                 press_conference_texts.append(data_point)
+    # Saving data as tensor
     data_tensor = torch.stack(press_conference_texts)
     torch.save(data_tensor, output_filepath)
 

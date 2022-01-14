@@ -18,6 +18,7 @@ def test_gradients():
     backpropogating on our training data.
 
     '''
+    # Loading a pretrained model
     model = AutoModelForCausalLM.from_pretrained("flax-community/dansk-gpt-wiki")
     optimizer = torch.optim.AdamW(params=model.parameters(), lr=3e-5)
 
@@ -27,6 +28,7 @@ def test_gradients():
 
     text = train_set[0]
 
+    # Backpropagation and stepping optimizer
     outputs = model(text, labels=text)
     loss = outputs[0]
     loss.backward()
@@ -47,12 +49,14 @@ def test_loss_reduction():
     small training session.
 
     '''
+    # Loading a pretrained model
     model = AutoModelForCausalLM.from_pretrained("flax-community/dansk-gpt-wiki")
     optimizer = torch.optim.AdamW(params=model.parameters(), lr=3e-5)
 
     dataset = TextDataset('data/processed/data_tensor_512.pt')
     dataloader = torch.utils.data.DataLoader(dataset[:2], batch_size=1, shuffle=True)
 
+    # Short training loop
     running_loss = []
     for epoch in range(2):
         running_loss_e = []
