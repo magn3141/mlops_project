@@ -1,21 +1,21 @@
 # Base image
-FROM huggingface/transformers-pytorch-cpu
+FROM python:3.9.9-slim
 
-# install python 
+# install python
 RUN apt update && \
-    apt install --no-install-recommends -y build-essential gcc curl && \ 
+    apt install --no-install-recommends -y build-essential gcc git && \
     apt clean && rm -rf /var/lib/apt/lists/*
 
-
 # Copy files
-WORKDIR /
 COPY requirements.txt requirements.txt
 COPY setup.py setup.py
 COPY src/ src/
 COPY data/ data/
 COPY models/ models/
-# RUN pip install torch==1.10.1+cpu torchvision==0.11.2+cpu torchaudio==0.10.1+cpu -f https://download.pytorch.org/whl/cpu/torch_stable.html
-RUN pip3 install -r /requirements.txt --no-cache-dir
+WORKDIR /
+RUN pip install -U git+https://github.com/huggingface/transformers.git@v4.13.0
+RUN pip install -r requirements.txt --no-cache-dir
 
-ENTRYPOINT ["python3", "-u", "src/models/train_model.py"]
+
+ENTRYPOINT ["python", "-u", "src/models/train_model.py"]
 
