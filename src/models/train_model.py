@@ -43,7 +43,7 @@ def main(cfg: DictConfig):
     dataset = TextDataset(
         path=working_dir + "/data/processed/" + cfg.train_data)
     dataloader = torch.utils.data.DataLoader(
-        dataset[:2], batch_size=cfg.batch_size, shuffle=True)
+        dataset, batch_size=cfg.batch_size, shuffle=True)
     log.info("Data loaded")
 
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -59,7 +59,7 @@ def main(cfg: DictConfig):
 
             optimizer.zero_grad()
             with profile(activities=[ProfilerActivity.CPU, ProfilerActivity.CUDA],
-                        record_shapes=True) as prof:
+                         record_shapes=True) as prof:
                 with record_function("model_inference"):
                     outputs = model(batch.to(device), labels=batch.to(device))
 
@@ -91,8 +91,8 @@ def main(cfg: DictConfig):
             model.save_pretrained("./")
         # now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M:%S")
         print(prof.key_averages(group_by_input_shape=True)
-            .table(sort_by="cpu_time_total", row_limit=10))
+              .table(sort_by="cpu_time_total", row_limit=10))
 
-     
+
 if __name__ == "__main__":
     main()
