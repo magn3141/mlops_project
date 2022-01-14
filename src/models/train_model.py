@@ -40,7 +40,7 @@ def main(cfg: DictConfig):
     dataset = TextDataset(
         path=working_dir + "/data/processed/" + cfg.train_data)
     dataloader = torch.utils.data.DataLoader(
-        dataset[:2], batch_size=cfg.batch_size, shuffle=True)
+        dataset, batch_size=cfg.batch_size, shuffle=True)
     log.info("Data loaded")
 
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
