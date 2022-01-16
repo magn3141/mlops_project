@@ -1,6 +1,7 @@
+import os
+
 import pytest
 import torch
-import os
 from transformers import AutoModelForCausalLM
 
 inputs = [(torch.randint(8000, (1, 512)), torch.rand(50257)),
