@@ -1,11 +1,13 @@
 import logging
+import os
 
 import hydra
 import numpy as np
 import torch
 import wandb
+from google.cloud import storage
 from omegaconf import DictConfig
-from torch.profiler import profile, record_function, ProfilerActivity
+from torch.profiler import ProfilerActivity, profile, record_function
 from transformers import AutoConfig, AutoModelForCausalLM
 
 from src.data.conference_dataset import TextDataset
@@ -15,6 +17,22 @@ from src.data.conference_dataset import TextDataset
 # Learning rate
 # n_epochs
 log = logging.getLogger(__name__)
+
+
+def save_model(gcloud_dir, local_dir):
+    """Saves the model to Google Cloud Storage"""
+    log.info(f"Saving model on gcloud at: {gcloud_dir}")
+    bucket = storage.Client().bucket(gcloud_dir)
+    if (os.path.isdir(local_dir)):
+        files = os.listdir(local_dir)
+        for f in files:
+            blob = bucket.blob(local_dir + f)
+            blob.chunk_size = 5 * 1024 * 1024  # Increase upload time to prevent timeout
+            blob.upload_from_filename(local_dir + f)
+    else:
+        blob = bucket.blob(local_dir)
+        blob.chunk_size = 5 * 1024 * 1024  # Increase upload time to prevent timeout
+        blob.upload_from_filename(local_dir)
 
 
 @hydra.main(config_path="config", config_name="train")
@@ -47,6 +65,7 @@ def main(cfg: DictConfig):
     log.info("Data loaded")
 
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    log.info(f"---- USING HARDWARE: {device} ----")
     model.train().to(device)
 
     optimizer = torch.optim.AdamW(params=model.parameters(), lr=cfg.lr)
@@ -58,10 +77,14 @@ def main(cfg: DictConfig):
         for i, batch in enumerate(dataloader):
 
             optimizer.zero_grad()
-            with profile(activities=[ProfilerActivity.CPU, ProfilerActivity.CUDA],
-                         record_shapes=True) as prof:
-                with record_function("model_inference"):
-                    outputs = model(batch.to(device), labels=batch.to(device))
+            if (cfg.profiling is True):
+                with profile(activities=[ProfilerActivity.CPU, ProfilerActivity.CUDA],
+                             record_shapes=True) as prof:
+                    with record_function("model_inference"):
+                        outputs = model(batch.to(device),
+                                        labels=batch.to(device))
+            else:
+                outputs = model(batch.to(device), labels=batch.to(device))
 
             loss = outputs[0]
             loss.backward()
@@ -85,13 +108,18 @@ def main(cfg: DictConfig):
             log.info(f"Saving new model with better loss ({min_loss})")
             # save both in hydra output folder & in models folder
             model.config.update(
-                {"train_run": {"min_loss": 2000}})
+                {"train_run": {"min_loss": min_loss}})
             # min_loss
             model.save_pretrained(f"{working_dir}/models/{cfg.name}")
             model.save_pretrained("./")
+
         # now = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M:%S")
-        print(prof.key_averages(group_by_input_shape=True)
-              .table(sort_by="cpu_time_total", row_limit=10))
+        if (cfg.profiling is True):
+            print(prof.key_averages(group_by_input_shape=True)
+                  .table(sort_by="cpu_time_total", row_limit=10))
+
+    if cfg.gcloud_training is True:
+        save_model(cfg.gcloud_dir, working_dir+"/models/"+cfg.name+"/")
 
 
 if __name__ == "__main__":

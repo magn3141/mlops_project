@@ -12,3 +12,4 @@ wandb==0.12.9
 pytest==6.2.5
 flake8==4.0.1
 isort==5.10.1
+google-cloud-storage==2.0.0

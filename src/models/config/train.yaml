@@ -10,3 +10,6 @@ n_epochs: 10
 train_data: "data_tensor_512.pt"
 wandb_project: "danish_gpt2"
 wandb_entity: "mlops_grp40"
+gcloud_training: False
+gcloud_dir: 'mlops-project-338109-aiplatform'
+profiling: False
