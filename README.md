@@ -97,9 +97,9 @@ point on the checklist for the exam.
 - [x] (optional) Create a new project on `gcp` and invite all group members to it
 - [x] Create a data storage on `gcp` for you data
 - [x] Create a trigger workflow for automatically building your docker images
-- [ ] Get your model training on `gcp`
-- [ ] Play around with distributed data loading
-- [ ] (optional) Play around with distributed model training
+- [x] Get your model training on `gcp`
+- [ ] ~~Play around with distributed data loading~~
+- [x] (optional) Play around with distributed model training
 - [ ] Play around with quantization and compilation for you trained models
 
 ### Week 3
