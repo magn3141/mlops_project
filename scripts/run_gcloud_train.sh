@@ -1,7 +1,7 @@
 export PROJECT_ID=mlops-project-338109
 export BUCKET_NAME=${PROJECT_ID}-aiplatform
-export IMAGE_REPO_NAME=gpt2_train_container_gpu
-export IMAGE_TAG=gpu_all_data
+export IMAGE_REPO_NAME=github.com
+export IMAGE_TAG=gpu_latest
 export IMAGE_URI=gcr.io/$PROJECT_ID/$IMAGE_REPO_NAME:$IMAGE_TAG
 export REGION=us-central1
 export JOB_NAME=custom_container_job_gpu_$(date +%Y%m%d_%H%M%S)

@@ -1,0 +1,7 @@
+bucket: "mlops-project-338109-aiplatform"
+cloud_dir: "/root/models/covid_press/"
+local_dir: "/models/covid_press/"
+backbone: "flax-community/dansk-gpt-wiki"
+tokenizer_max_length: 512
+run_locally: False
+profile_file_path: "/src/api/profile.json"
