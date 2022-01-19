@@ -4,89 +4,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🇩🇰 Press release generator</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
 </head>
 
 <body>
     <div
-        class="min-h-screen bg-gradient-to-tr from-blue-50 to-blue-100 py-6 flex flex-col justify-center relative overflow-hidden sm:py-12">
+        class="min-h-screen bg-gradient-to-tr from-blue-50 to-blue-200 py-6 flex flex-col justify-center relative overflow-hidden sm:py-12">
 
         <div
             class="relative px-6 pt-10 pb-8 bg-white shadow-xl ring-1 ring-gray-900/5   w-4/5 mx-auto sm:rounded-lg sm:px-10">
-            <h1 class="text-xl font-medium text-gray-900 leading-6">Generate Press releases</h1>
-            <p class="mt-1 text-gray-500">Write some input and generate the rest of the input.</p>
+            <h1 class="text-2xl font-medium text-gray-900 leading-6">🇩🇰 Press release generator</h1>
+            <p class="mt-1 text-gray-500">Generate danish press releases. Write some input and click on generate.</p>
+
             <div class="flex flex-col gap-6 mt-4">
-                <div class="divide-y divide-gray-300/50">
+                <div class="">
                     <div class="border-1 border-gray-300 ">
                         <textarea rows="10" name="comment" id="input-textarea"
                             class="border border-2 p-2 shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"></textarea>
                     </div>
+                    <p id="error-box"
+                        class="px-4 py-1 mt-1 bg-red-100 text-red-500 text-sm rounded border-2 border-red-300 invisible">
+                        Error: Please try again...
+                    </p>
                 </div>
-                <div class="">
-                    <label for="length" class="block text-sm font-medium text-gray-700">Length of output</label>
-                    <div class="mt-1 border-1 border-gray-300 w-40">
-                        <input type="number" name="length" id="length"
-                            class="shadow-sm focus:ring-blue-500 px-2 py-1 focus:border-blue-500 block w-full sm:text-sm border-2 border-gray-300 rounded-md"
-                            placeholder="50" value="50">
-                    </div>
-                </div>
-                <div class="">
-                    <label for="length" class="block text-sm font-medium text-gray-700 opacity-50">Auto generate
-                    </label>
-                    <div class="relative flex items-start opacity-50">
-                        <div class="flex items-center h-5">
-                            <input id="comments" aria-describedby="comments-description" name="comments" disabled
-                                type="checkbox"
-                                class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded" />
+
+                <div class="flex items-end justify-between">
+                    <div class="flex gap-12">
+                        <div class="">
+                            <label for="length" class="block text-sm font-medium text-gray-700">Length of output</label>
+                            <div class="mt-1 border-1 border-gray-300 w-40">
+                                <input type="number" name="length" id="length"
+                                    class="shadow-sm focus:ring-blue-500 px-2 py-1 focus:border-blue-500 block w-full sm:text-sm border-2 border-gray-300 rounded-md"
+                                    placeholder="50" value="50">
+                            </div>
                         </div>
-                        <div class="ml-3 text-sm">
-                            <p id="comments-description" class="text-gray-500">Automatically generate new text after x
-                                s.
-                            </p>
+                        <div class="">
+                            <label for="length" class="block text-sm font-medium text-gray-700 opacity-50">Auto generate
+                            </label>
+                            <div class="relative flex items-start opacity-50">
+                                <div class="flex items-center h-5">
+                                    <input id="comments" aria-describedby="comments-description" name="comments"
+                                        disabled type="checkbox"
+                                        class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded" />
+                                </div>
+                                <div class="ml-3 text-sm">
+                                    <p id="comments-description" class="text-gray-500">Automatically generate new text
+                                        after
+                                        x
+                                        s.
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div>
-                    <button type="button" id="generate-btn"
-                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                        Generate
-                    </button>
+                    <div class="flex item-center">
+                        <button type="button" id="processing-btn"
+                            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition ease-in-out duration-150 cursor-not-allowed hidden"
+                            disabled>
+                            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg"
+                                fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                    stroke-width="4">
+                                </circle>
+                                <path class="opacity-75" fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                </path>
+                            </svg>
+                            Processing...
+                        </button>
+
+                        <button type="button" id="generate-btn"
+                            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            🤖 Generate
+                        </button>
+                    </div>
                 </div>
             </div>
+        </div>
+        <div class="flex justify-center mt-16">
+            <a class="text-lg text-blue-700" href="https://github.com/magn3141/mlops_project">GitHub</a>
         </div>
     </div>
 </body>
 
 <script>
-    const _URL = ""
+    const _URL = "http://us-central1-mlops-project-338109.cloudfunctions.net/generate-covid-press"
 
     async function generateText(url = '', data = {}) {
         // Default options are marked with *
         const response = await fetch(url, {
             method: 'POST', // *GET, POST, PUT, DELETE, etc.
             mode: 'cors', // no-cors, *cors, same-origin
-            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-            credentials: 'same-origin', // include, *same-origin, omit
+            // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            // credentials: 'same-origin', // include, *same-origin, omit
             headers: {
                 'Content-Type': 'application/json'
                 // 'Content-Type': 'application/x-www-form-urlencoded',
             },
-            redirect: 'follow', // manual, *follow, error
-            referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+            // redirect: 'follow', // manual, *follow, error
+            // referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
             body: JSON.stringify(data) // body data type must match "Content-Type" header
         });
-        return response.json(); // parses JSON response into native JavaScript objects
+        return response; // parses JSON response into native JavaScript objects
     }
 
     var button = document.getElementById("generate-btn");
     button.addEventListener("click", function (e) {
+        const processingButton = document.getElementById('processing-btn');
+        const button = document.getElementById("generate-btn");
+        const errorBox = document.getElementById("error-box");
+        processingButton.classList.remove("hidden")
+        button.classList.add('hidden')
+
         // Send request
-        const input = document.getElementById("input-textarea").value;
+        const inputField = document.getElementById("input-textarea");
+        inputField.disabled = true;
+        inputField.classList.add("opacity-50")
+        const inputValue = inputField.value
         const maxLength = document.getElementById("length").value;
 
-        generateText(_URL, { message: input, max_length: maxLength }).then(response => {
-            input.value = response;
+        generateText(_URL, { message: inputValue, max_length: maxLength }).then(({ text }) => {
+            input.value = text;
+            button.classList.remove("hidden")
+            processingButton.classList.add('hidden')
+            inputField.disabled = false;
+            inputField.classList.remove("opacity-50")
+            document.getElementById("input-textarea");
+            errorBox.classList.remove('visible');
+            errorBox.classList.add('invisible');
+
+        }).catch(error => {
+            button.classList.remove("hidden")
+            processingButton.classList.add('hidden')
+            inputField.disabled = false;
+            inputField.classList.remove("opacity-50")
+            errorBox.classList.add('visible');
+            errorBox.classList.remove('invisible')
         })
 
     }, false);
