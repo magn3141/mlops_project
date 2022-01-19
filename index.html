@@ -124,17 +124,20 @@
         const inputValue = inputField.value
         const maxLength = document.getElementById("length").value;
 
-        generateText(_URL, { message: inputValue, max_length: maxLength }).then(({ text }) => {
-            input.value = text;
-            button.classList.remove("hidden")
-            processingButton.classList.add('hidden')
-            inputField.disabled = false;
-            inputField.classList.remove("opacity-50")
-            document.getElementById("input-textarea");
-            errorBox.classList.remove('visible');
-            errorBox.classList.add('invisible');
+        generateText(_URL, { message: inputValue, max_length: maxLength }).then((response) => {
+            return response.text().then(function (text) {
+                inputField.value = text;
+                button.classList.remove("hidden")
+                processingButton.classList.add('hidden')
+                inputField.disabled = false;
+                inputField.classList.remove("opacity-50")
+                document.getElementById("input-textarea");
+                errorBox.classList.remove('visible');
+                errorBox.classList.add('invisible');
+            });
 
         }).catch(error => {
+            alert(error)
             button.classList.remove("hidden")
             processingButton.classList.add('hidden')
             inputField.disabled = false;
