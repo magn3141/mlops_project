@@ -1,0 +1,10 @@
+steps:
+      - name: 'gcr.io/cloud-builders/docker'
+        args: ['build', '-t', 'gcr.io/mlops-project-338109/github.com/magn3141/mlops_project:$COMMIT_SHA', '-f', 'dockerfiles/gpu_gcloud.dockerfile', '--build-arg', "wandb_api_key=${WANDB_API_KEY}", .]
+        secretEnv: ['WANDB_API_KEY']
+      - name: 'gcr.io/cloud-builders/docker'
+        args: ['push', 'gcr.io/mlops-project-338109/github.com/magn3141/mlops_project:$COMMIT_SHA']
+availableSecrets:
+  secretManager:
+  - versionName: projects/1035981835457/secrets/WANDB_API_KEY/versions/1
+    env: WANDB_API_KEY
