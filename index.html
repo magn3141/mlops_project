@@ -89,13 +89,13 @@
 </body>
 
 <script>
-    const _URL = "http://us-central1-mlops-project-338109.cloudfunctions.net/generate-covid-press"
+    const _URL = "https://us-central1-mlops-project-338109.cloudfunctions.net/generate-covid-press"
 
     async function generateText(url = '', data = {}) {
         // Default options are marked with *
         const response = await fetch(url, {
             method: 'POST', // *GET, POST, PUT, DELETE, etc.
-            mode: 'cors', // no-cors, *cors, same-origin
+            // mode: 'cors', // no-cors, *cors, same-origin
             // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
             // credentials: 'same-origin', // include, *same-origin, omit
             headers: {
