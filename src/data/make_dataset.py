@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import logging
 import os
 from pathlib import Path
@@ -7,6 +6,7 @@ import click
 import torch
 from dotenv import find_dotenv, load_dotenv
 from transformers import AutoTokenizer
+import csv
 
 
 @click.command()
@@ -26,10 +26,13 @@ def main(input_filepath: str, tensor_size: str, tokenizer: str, output_filepath:
     logger.info('making final data set from raw data')
 
     tokenizer = AutoTokenizer.from_pretrained(tokenizer)
+    SUM_data = getSUMPressReleases(tokenizer, tensor_size)
 
     press_conference_texts = []
     files = os.listdir(input_filepath)
     for f in files:
+        if f[0] == '.':
+            continue
         with open(input_filepath+f) as file:
             # data = file.read().replace('\n',' ')
             # Loading data from file
@@ -44,8 +47,31 @@ def main(input_filepath: str, tensor_size: str, tokenizer: str, output_filepath:
                 start += tensor_size
                 press_conference_texts.append(data_point)
     # Saving data as tensor
-    data_tensor = torch.stack(press_conference_texts)
+    stm_data_tensor = torch.stack(press_conference_texts)
+    SUM_data_tensor = torch.squeeze(torch.stack(SUM_data[:-1]))
+    print(stm_data_tensor.shape)
+    print(SUM_data_tensor.shape)
+
+    data_tensor = torch.cat((stm_data_tensor, SUM_data_tensor), dim=0)
+
+    print(data_tensor.shape)
     torch.save(data_tensor, output_filepath)
+
+
+def getSUMPressReleases(tokenizer, split_size):
+    data = None
+    with open('data/raw/sum_press/data.csv') as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=',')
+        line_count = 0
+        for row in csv_reader:
+            tokenized_text = tokenizer.encode(row[4], return_tensors='pt')
+            if line_count == 0:
+                data = tokenized_text
+            else:
+                data = torch.cat((data, tokenized_text), dim=1)
+            line_count += 1
+    splitted_data = torch.split(data, split_size, dim=1)
+    return list(splitted_data)
 
 
 if __name__ == '__main__':
