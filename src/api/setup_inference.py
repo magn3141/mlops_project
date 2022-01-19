@@ -1,5 +1,5 @@
 from transformers import AutoTokenizer, AutoModelForCausalLM
-from flask import Flask, jsonify, request
+from flask import Flask, request
 from google.cloud import storage
 import logging
 import hydra
