@@ -35,7 +35,8 @@ RUN wget -nv \
     ln -s /root/.config /config && \
     # Remove the backup directory that gcloud creates
     rm -rf /root/tools/google-cloud-sdk/.install/.backup
-
+ARG wandb_api_key
+ENV WANDB_API_KEY=$wandb_api_key
 ENV PATH $PATH:/root/tools/google-cloud-sdk/bin
 RUN echo '[GoogleCompute]\nservice_account = default' > /etc/boto.cfg
 

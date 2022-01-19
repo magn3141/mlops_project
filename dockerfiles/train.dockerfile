@@ -10,6 +10,9 @@ RUN apt update && \
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
 ENV PATH="/root/.cargo/bin:${PATH}"
 
+ARG wandb_api_key
+ENV WANDB_API_KEY=$wandb_api_key
+
 # Copy files
 COPY requirements.txt requirements.txt
 COPY setup.py setup.py
