@@ -12,6 +12,7 @@ Initially, we will fine-tune the model using the official transcripts from the P
 
 We expect to work on fine-tuning the GPT-2 model using the aforementioned dataset. GPT-2 has been fine-tuned and used for similar purposes before.
 
+### Demo: https://magn3141.github.io/mlops_project/
 
 ## Project Organization
 ------------
@@ -86,7 +87,7 @@ point on the checklist for the exam.
 - [x] Used Hydra to load the configurations and manage your hyperparameters
 - [x] When you have something that works somewhat, remember at some point to to some profiling and see if you can optimize your code
 - [x] Use wandb to log training progress and other important metrics/artifacts in your code
-- [ ] ~~Use pytorch-lightning (if applicable) to reduce the amount of boilerplate in your code~~
+- ~~[ ] Use pytorch-lightning (if applicable) to reduce the amount of boilerplate in your code~~
 
 ### Week 2
 
@@ -98,7 +99,7 @@ point on the checklist for the exam.
 - [x] Create a data storage on `gcp` for you data
 - [x] Create a trigger workflow for automatically building your docker images
 - [x] Get your model training on `gcp`
-- [ ] ~~Play around with distributed data loading~~
+- ~~[ ] Play around with distributed data loading~~
 - [x] (optional) Play around with distributed model training
 - [ ] Play around with quantization and compilation for you trained models
 
@@ -108,7 +109,6 @@ point on the checklist for the exam.
 - [x] Checked how robust your model is towards data drifting
 - [x] Deployed your model using `gcp`
 - [ ] Monitored the system of your deployed model
-- [ ] Monitored the performance of your deployed model
 
 ### Additional
 
