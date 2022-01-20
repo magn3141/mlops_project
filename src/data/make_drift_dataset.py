@@ -2,16 +2,17 @@ import os
 import re
 import click
 
+
 def drift_data(data: str):
     """Drifts input string by replacing words
        with previous words to change the distribution
        of words.
     """
-    keep_chars = ['.',',','!','?']
+    keep_chars = ['.', ',', '!', '?']
     split_data = re.findall(r"[\w']+|[.,!?;]", data)
     for i in range(len(split_data)):
-        if i%5 == 0:
-            if split_data[i] not in keep_chars and split_data[i-1] not in keep_chars: 
+        if i % 5 == 0:
+            if split_data[i] not in keep_chars and split_data[i-1] not in keep_chars:
                 split_data[i] = split_data[i-1]
     drifted_data = " ".join(split_data)
     return drifted_data

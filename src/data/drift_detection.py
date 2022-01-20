@@ -7,6 +7,7 @@ from sklearn.manifold import Isomap
 from src.data.conference_dataset import TextDataset
 from transformers import AutoConfig, AutoModelForCausalLM
 
+
 @click.command()
 @click.argument('working_dir', type=click.Path(exists=True))
 def main(working_dir):
@@ -36,8 +37,8 @@ def main(working_dir):
     drifted_dataset = TextDataset(
         path=working_dir + "data/drifted_processed/drifted_data_tensor_512.pt")
     drifted_dataloader = torch.utils.data.DataLoader(
-        drifted_dataset, batch_size=batch_size, shuffle=True)
-    
+        drifted_dataset, batch_size=1, shuffle=True)
+
     torchdrift.utils.fit(drifted_dataloader, model, drift_detector)
     drifted_features = model(next(iter(drifted_dataloader)))
     drifted_score = drift_detector(drifted_features)
